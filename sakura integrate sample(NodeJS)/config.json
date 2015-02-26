@@ -1,0 +1,6 @@
+﻿{
+	"ClientId" : "********************************"
+	, "ClientSecret" : "*********************************************"
+	, "RedirectURI" : "http://localhost:1337/OAuthCallBack"
+	, "EntryPoint": "http://localhost:1337/EntryPoint"
+}
