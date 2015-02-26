@@ -74,7 +74,8 @@ curl_setopt($chGroupMember, CURLOPT_ENCODING, '');//auto handle content-encoding
 curl_setopt($chGroupMember, CURLOPT_URL,
     "https://dsns.1campus.net/" . $application . "/sakura/GetGroupMember"
         . "?stt=PassportAccessToken"
-        . "&AccessToken=" . $accessToken );
+        . "&AccessToken=" . $accessToken
+        . "&parser=spliter&content=GroupId:" . $groupid );
 $resultGroupMember = curl_exec($chGroupMember);
 curl_close ($chGroupMember);
 ?>

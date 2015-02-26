@@ -121,7 +121,8 @@ class OnecampusController < ApplicationController
         # 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
         url = "https://dsns.1campus.net/" + req_app + "/sakura/GetGroupMember" +
             "?stt=PassportAccessToken" +
-            "&AccessToken=" + accessToken
+            "&AccessToken=" + accessToken +
+            "&parser=spliter&content=GroupId:" + req_group_id
 
         response = fetch(url, limit = 10)
         @resultGroupMember = response.body if response.code == '200'

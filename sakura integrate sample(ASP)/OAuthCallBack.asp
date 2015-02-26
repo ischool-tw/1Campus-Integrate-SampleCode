@@ -57,7 +57,6 @@ End If
 url = "https://dsns.1campus.net/" & req_app & "/sakura/GetMyGroup" &_
     "?stt=PassportAccessToken" &_
     "&AccessToken=" & accessToken
-response.write url & "<hr>"
 xmlHttp.Open "GET", url, false
 xmlHttp.Send
 If xmlHttp.status = 200 Then
@@ -69,13 +68,12 @@ End If
 ' 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
 url = "https://dsns.1campus.net/" & req_app & "/sakura/GetGroupMember" &_
     "?stt=PassportAccessToken" &_
-    "&AccessToken=" & accessToken
-response.write url & "<hr>"
+    "&AccessToken=" & accessToken &_
+    "&parser=spliter&content=GroupId:" & req_group_id
 xmlHttp.Open "GET", url, false
 xmlHttp.Send
 If xmlHttp.status = 200 Then
     resultGroupMember = xmlHttp.responseText
-
 End If
 Set xmlHttp = Nothing
 %>

@@ -67,9 +67,10 @@ exports.oAuthCallBack = function(req, res){
                 );
                 //取得GroupMember
                 https.get(
-                    "https://dsns.1campus.net/" + application + "/sakura/GroupMember"
+                    "https://dsns.1campus.net/" + application + "/sakura/GetGroupMember"
                         + "?stt=PassportAccessToken"
                         + "&AccessToken=" + accessToken
+                        + "&parser=spliter&content=GroupId:" + groupid
                     , function(rspRedirect){
                         //http redirect，https://dsns.1campus.net 會redirect到真正的位置
                         //抓dsns.1campus.net的redirect header再呼叫
