@@ -108,15 +108,6 @@ class OnecampusController < ApplicationController
         @resultUserInfo = response.body if response.code == '200'
 
 
-        # 取得Group
-        # 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
-        url = "https://dsns.1campus.net/" + req_app + "/sakura/GetMyGroup" +
-            "?stt=PassportAccessToken" +
-            "&AccessToken=" + accessToken
-        response = fetch(url, limit = 10)
-        @resultGroup = response.body if response.code == '200'
-
-
         # 取得GroupMember
         # 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
         url = "https://dsns.1campus.net/" + req_app + "/sakura/GetGroupMember" +

@@ -32,7 +32,7 @@ exports.oAuthCallBack = function(req, res){
                 //取得傳回的accessToken
                 accessToken=JSON.parse(data).access_token;
 
-                var getUserInfo, getGroup, getGroupMember;
+                var getUserInfo, getGroupMember;
                 //取得userInfo
                 https.get(
                     "https://auth.ischool.com.tw/services/me.php?access_token=" + accessToken
@@ -43,28 +43,7 @@ exports.oAuthCallBack = function(req, res){
                         });
                     }
                 );
-                //取得Group
-                https.get(
-                    "https://dsns.1campus.net/" + application + "/sakura/GetMyGroup"
-                        + "?stt=PassportAccessToken"
-                        + "&AccessToken=" + accessToken
-                    , function(rspRedirect){
-                        //http redirect，https://dsns.1campus.net 會redirect到真正的位置
-                        //抓dsns.1campus.net的redirect header再呼叫
-                        if (rspRedirect.statusCode > 300 && rspRedirect.statusCode < 400 && rspRedirect.headers.location){
-                            var protocolObj = (rspRedirect.headers.location.substring(0, 8) == 'https://') ? https : http;
-                            protocolObj.get(
-                                rspRedirect.headers.location
-                                , function(resGroup){
-                                    resGroup.on('data', function(data) {
-                                        getGroup = data;
-                                        finish();
-                                    });
-                                }
-                            );
-                        }
-                    }
-                );
+
                 //取得GroupMember
                 https.get(
                     "https://dsns.1campus.net/" + application + "/sakura/GetGroupMember"
@@ -88,9 +67,9 @@ exports.oAuthCallBack = function(req, res){
                         }
                     }
                 );
-                //產生response，判斷三個response都有資料後產生
+                //產生response，判斷二個response都有資料後產生
                 var finish = function(){
-                    if(getUserInfo && getGroup && getGroupMember){
+                    if(getUserInfo && getGroupMember){
                         res.writeHead( 200, { 'Content-Type': 'text/html' });
                         var html =
 '<!DOCTYPE html>'
@@ -108,21 +87,14 @@ exports.oAuthCallBack = function(req, res){
 + '            height: 238px;'
 + '            width: 905px;'
 + '        }'
-
-+ '        #TextArea3 {'
-+ '            height: 238px;'
-+ '            width: 905px;'
-+ '        }'
 + '    </style>'
 + '</head>'
 + '<body>'
 + '        <div>'
 + '            UserInfo:<br />'
 + '            <textarea id="TextArea1" name="S1" >'+getUserInfo+'</textarea><br />'
-+ '            Group:<br />'
-+ '            <textarea id="TextArea2" name="S2" >'+getGroup+'</textarea><br />'
 + '            GroupMember:<br />'
-+ '            <textarea id="TextArea3" name="S3" >'+getGroupMember+'</textarea>'
++ '            <textarea id="TextArea2" name="S2" >'+getGroupMember+'</textarea>'
 + '        </div>'
 + '</body>'
 + '</html>';

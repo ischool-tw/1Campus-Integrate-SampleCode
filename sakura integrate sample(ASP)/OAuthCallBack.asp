@@ -52,18 +52,6 @@ If xmlHttp.status = 200 Then
     resultUserInfo = xmlHttp.responseText
 End If
 
-' 取得Group
-' 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
-url = "https://dsns.1campus.net/" & req_app & "/sakura/GetMyGroup" &_
-    "?stt=PassportAccessToken" &_
-    "&AccessToken=" & accessToken
-xmlHttp.Open "GET", url, false
-xmlHttp.Send
-If xmlHttp.status = 200 Then
-    resultGroup = xmlHttp.responseText
-End If
-
-
 ' 取得GroupMember
 ' 設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
 url = "https://dsns.1campus.net/" & req_app & "/sakura/GetGroupMember" &_
@@ -74,6 +62,20 @@ xmlHttp.Open "GET", url, false
 xmlHttp.Send
 If xmlHttp.status = 200 Then
     resultGroupMember = xmlHttp.responseText
+    Set objXMLDoc = Server.CreateObject("MSXML2.DOMDocument.3.0")
+    objXMLDoc.async = False
+    objXMLDoc.loadXML(resultGroupMember)
+    Dim xmlGroup
+    For Each xmlGroup In objXMLDoc.documentElement.selectNodes("/Body/Group[GroupId=" & req_group_id & "]")
+        Dim isTeacher : isTeacher = xmlGroup.selectSingleNode("IsTeacher").text
+        Dim isStudent : isStudent = xmlGroup.selectSingleNode("IsStudent").text
+        ' 透過 isTeacher, isStudent 知道登入者在群組中的身分，並驗證與登入身份是否符合
+        ' Response.Write Server.HTMLEncode(isTeacher) & " "
+        ' Response.Write Server.HTMLEncode(isStudent) & "<br>"
+        ' 開始驗證...
+        ' 開始同步...
+    Next
+    Set objXMLDoc = Nothing
 End If
 Set xmlHttp = Nothing
 %>
@@ -93,21 +95,14 @@ Set xmlHttp = Nothing
             height: 238px;
             width: 905px;
         }
-
-        #TextArea3 {
-            height: 238px;
-            width: 905px;
-        }
     </style>
 </head>
 <body>
-        <div>
-            UserInfo:<br />
-            <textarea id="TextArea1" name="S1" ><% Response.Write resultUserInfo %></textarea><br />
-            Group:<br />
-            <textarea id="TextArea2" name="S2" ><% Response.Write resultGroup %></textarea><br />
-            GroupMember:<br />
-            <textarea id="TextArea3" name="S3" ><% Response.Write resultGroupMember %></textarea>
-        </div>
+    <div>
+        UserInfo:<br />
+        <textarea id="TextArea1" name="S1" ><%=resultUserInfo%></textarea><br />
+        GroupMember:<br />
+        <textarea id="TextArea2" name="S2" ><%=resultGroupMember%></textarea>
+    </div>
 </body>
 </html>

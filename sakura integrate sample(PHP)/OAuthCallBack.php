@@ -46,22 +46,6 @@ curl_setopt($chUserInfo, CURLOPT_URL,
 $resultUserInfo = curl_exec($chUserInfo);
 curl_close ($chUserInfo);
 
-//取得Group
-$chGroup = curl_init();
-curl_setopt($chGroup, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($chGroup, CURLOPT_SSL_VERIFYPEER, false);  //skip ssl verify
-
-//設定自動處理http redirect，https://dsns.1campus.net 會redirect到真正的位置
-curl_setopt($chGroup, CURLOPT_FOLLOWLOCATION, true );
-
-curl_setopt($chGroup, CURLOPT_ENCODING, '');//auto handle content-encoding ex: gzip
-curl_setopt($chGroup, CURLOPT_URL,
-    "https://dsns.1campus.net/" . $application . "/sakura/GetMyGroup"
-        . "?stt=PassportAccessToken"
-        . "&AccessToken=" . $accessToken );
-$resultGroup = curl_exec($chGroup);
-curl_close ($chGroup);
-
 //取得GroupMember
 $chGroupMember = curl_init();
 curl_setopt($chGroupMember, CURLOPT_RETURNTRANSFER, true);
@@ -95,21 +79,14 @@ curl_close ($chGroupMember);
             height: 238px;
             width: 905px;
         }
-
-        #TextArea3 {
-            height: 238px;
-            width: 905px;
-        }
     </style>
 </head>
 <body>
-        <div>
-            UserInfo:<br />
-            <textarea id="TextArea1" name="S1" ><?php echo $resultUserInfo ?></textarea><br />
-            Group:<br />
-            <textarea id="TextArea2" name="S2" ><?php echo $resultGroup ?></textarea><br />
-            GroupMember:<br />
-            <textarea id="TextArea3" name="S3" ><?php echo $resultGroupMember ?></textarea>
-        </div>
+    <div>
+        UserInfo:<br />
+        <textarea id="TextArea1" name="S1" ><?php echo $resultUserInfo ?></textarea><br />
+        GroupMember:<br />
+        <textarea id="TextArea2" name="S2" ><?php echo $resultGroupMember ?></textarea>
+    </div>
 </body>
 </html>
